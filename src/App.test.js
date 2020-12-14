@@ -3,9 +3,10 @@ import { shallow } from "enzyme";
 import App from "./App";
 beforeAll(() => {
   global.fetch = jest.fn(); // mocking `fetch()` API
+  window.fetch = jest.fn()
 });
 test("App loads list of movies from server", () => {
-  let wrapper = shallow(<App />);
+  let wrapper = shallow(<App />, { disableLifecycleMethods: true });
 
   const spyDidMount = jest.spyOn(App.prototype, "componentDidMount");
 
@@ -23,11 +24,14 @@ test("App loads list of movies from server", () => {
       },
     });
   });
-
-
-  wrapper.instance().componentDidMount().then(()=>{
+  const didMount = wrapper.instance().componentDidMount()
+  expect(spyDidMount).toHaveBeenCalled();
+  didMount.then(() => {
     wrapper.update()
-  //  expect(wrapper.state().movies.length).toEqual(1)
+    expect(wrapper.state().movies.length).toEqual(1)
+    spyDidMount.mockRestore();
+    fetch.mockClear();
+    done();
   })
 
 

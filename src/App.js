@@ -9,13 +9,13 @@ class App extends React.Component {
     super(props)
   }
   state = {
-    movies:[]
+    movies: []
   }
-  // componentDidMount() {
-  //   fetch("http://localhost:3001/movies")
-  //     .then((response) => response.json())
-  //     .then((data) => this.setState({ movies: data }));
-  // }
+  componentDidMount() {
+    return fetch("http://localhost:3001/movies")
+      .then((response) => response.json())
+      .then((data) => this.setState({ movies: data }));
+  }
 
   render() {
     return (
@@ -23,7 +23,7 @@ class App extends React.Component {
         <Header />
         <Switch>
           <Route exact path="/">
-            <Home movies={["hello","Hi"]} />
+            <Home movies={["hello", "Hi"]} />
           </Route>
         </Switch>
       </Router>
